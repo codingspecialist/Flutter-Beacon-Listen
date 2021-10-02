@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:flutter_beacon_listen/components/beacon_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,6 +12,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isListening = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initFlutterBeacon();
+  }
+
+  void _initFlutterBeacon() async {
+    try {
+      await flutterBeacon.initializeScanning;
+      await flutterBeacon.initializeAndCheckScanning; // 권한체크=>자동권한요청
+      print(
+          '\x1B[95m========== Flutter Beacon Initialized ==========\x1B[105m');
+    } on PlatformException catch (e) {
+      print('\x1B[95m========== Flutter Beacon Init Faild ==========\x1B[105m');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
